@@ -6,34 +6,36 @@ repository root with `python -m project`.
 
 ## Create a new application
 
-Copy this template into a new directory, excluding any existing `.git`, `.venv`,
-and `.env` directories/files. On macOS or Linux, for example:
+From this template directory, run the initializer with the destination path:
 
 ```bash
-mkdir my_cli
-rsync -av --exclude='.git' --exclude='.venv' --exclude='.env' \
-  --exclude='__pycache__' /path/to/default_cli_python/ my_cli/
-cd my_cli
+./bin/init.sh ~/workspace/project
+cd ~/workspace/project
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-cp .env.dist .env
 python -m project
 python -m project --help
 python -m project --doctor
 ```
 
-On Windows, use `py -m venv .venv`, activate with
-`.venv\Scripts\Activate.ps1` in PowerShell, and use `Copy-Item .env.dist .env`.
-No package installation or console-script registration is required.
+The script requires Bash and Python 3.10+ (`python3`), with no third-party
+dependencies. It works from any working directory when invoked by its path.
+On Windows, run the initializer through WSL or a Bash environment with Python 3.
 
-To rename the application:
+The destination's directory name becomes the Python package name. For example,
+`./bin/init.sh ~/workspace/my_cli` creates an application run as
+`python -m my_cli`. Use a valid Python identifier such as `my_cli`, without
+hyphens or spaces. Names conflicting with Python modules or template dependencies
+are rejected. Parent directories may contain spaces when the path is quoted.
 
-1. Rename `project/` to a valid Python package name, such as `my_cli`.
-2. Replace `project` references in the tests, README, and `.env.dist`.
-3. Run `python -m my_cli`. Internal imports are relative, and help automatically
-   uses the package name.
-4. Initialize a new Git repository if desired with `git init`.
+The destination must not already exist and must be outside this template.
+The initializer copies application sources, CLI tests, requirements, conventions,
+and ignore rules; adapts the README and package references; and creates `.env`
+from the harmless `.env.dist`. It excludes local credentials, Git history,
+virtual environments, caches, and the initializer itself. It does not install
+dependencies or initialize Git; run the setup commands shown on completion and
+use `git init` if desired.
 
 ## Structure
 
